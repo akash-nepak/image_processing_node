@@ -1,0 +1,23 @@
+*pth
+
+
+datasets/
+dataset/
+data/datasets/
+data/
+
+# Ignore JPEG images anywhere in the repo
+**/*.jpg
+**/*.jpeg
+**/*.JPG
+**/*.JPEG
+
+# Ignore common annotation file types and annotation folders
+annotations/
+**/annotations/
+**/*.xml
+**/*.json
+**/*.txt
+**/*.csv
+**/*.yml
+**/*.yaml

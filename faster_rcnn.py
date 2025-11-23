@@ -110,13 +110,29 @@ class RegionProposalNetwork(nn.Module):
     
     def assign_targets_to_anchors(self,anchors,gt_boxes):
 
-        iou_matrix = get_iou(anchors,gt_boxes) #shape (num_anchors,num_gt_boxes)
+        iou_matrix = get_iou(anchors,gt_boxes) #shape (num_gt_boxes,num_anchors)
 
         #max iou for each anchor boxes 
-        best_match_iou,best_match_gt_index = iou_matrix.max(dim=0)  #shape (num_anchors,)
+        best_match_iou,best_match_gt_index = iou_matrix.max(dim=0)  #gives max of iou for each anchor box
 
-        best_match_gt__idx_pre_threshold = best_match_gt_index.clone()
+        best_match_gt__idx_pre_threshold = best_match_gt_index.clone()  #to keep a copy of best match gt index before thresholding, so each gt box has at least one anchor assigned to it
         
+        below_low_threeshold = best_match_iou < 0.3
+        between_thresholds = (best_match_iou >=0.3) & (best_match_iou <0.7)
+        best_match_iou = best_match_iou >=0.7
+
+        best_match_iou[below_low_threeshold] = -1
+        best_match_iou[between_thresholds] = -2
+
+        #low quality anchor boxes
+
+        gt_pred_pair_with_highest_iou = iou_matrix.max (dim=1)  #gives index of anchor box with highest iou for each gt box
+        
+
+
+
+
+    
         
 
 
